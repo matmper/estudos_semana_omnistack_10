@@ -1,1 +1,23 @@
-global.css
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+
+:root {
+	--color__purple_light: #7d40e7;
+	--color__purple_dark: #6931ca;
+};
+
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	box-sizing: 0;
+}
+
+html, body, #root {
+	height: 100%;
+	font-family: Roboto, sans-serif;
+}
+
+body {
+	background: #E5E6F0;
+	-webking-font-smoothing: antiliased;
+}

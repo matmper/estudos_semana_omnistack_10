@@ -1,0 +1,49 @@
+#app main ul li.dev-item {
+	background-color: #FFF;
+	border-shadow: 0 0 14px 0 rgba(0, 0, 0, .2);
+	border-radius: 2px;
+	padding: 20px;
+}
+
+#app main ul li.dev-item header {
+	display: flex;
+}
+
+#app main ul li.dev-item header img {
+	width: 54px;
+	height: 54px;
+	border-radius: 50%;
+}
+
+#app main ul li.dev-item header .user-info {
+	margin-left: 10px;
+}
+
+#app main ul li.dev-item header .user-info strong {
+	display: block;
+	font-size: 16px;
+	color: #333;
+}
+
+#app main ul li.dev-item header .user-info span {
+	font-size: 13px;
+	color: #999;
+	margin-top: 2px;
+}
+
+#app main ul li.dev-item header .user-info p {
+	color: #666;
+	font-size: 14px;
+	line-height: 20px;
+	margin: 10px 0;
+}
+
+#app main ul li.dev-item header .user-info a {
+	color: var(--color__purple_light);
+	font-size: 14px;
+	text-decoration: none;
+}
+
+#app main ul li.dev-item header .user-info a:hover {
+	color: var(--color__purple_dark);
+}
