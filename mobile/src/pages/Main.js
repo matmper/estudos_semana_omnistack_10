@@ -5,12 +5,15 @@ import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
 import { MaterialIcons } from '@expo/vector-icons';
 
 import api from '../services/api';
+import socket from '../services/socket';
+
 
 function Main({ navigation }) {
 
 	const [devs, setDevs]					= useState([]);
 	const [currentRegion, setCurrentRegion] = useState(null);
 	const [techs, setTechs]					= useState('');
+	const [position, setPosition]			= useState('');
 
 	useEffect(() => {
 		async function loadInitialPosition() {
@@ -33,6 +36,8 @@ function Main({ navigation }) {
 					longitudeDelta: 0.04,
 				});
 
+				setPosition( `${latitude}, ${longitude}`);
+
 			// senão, pede novamente
 			} else {
 
@@ -46,6 +51,28 @@ function Main({ navigation }) {
 
 	}, []);
 
+	useEffect(() => {
+
+		socket.subscribeToNewDevs(dev => 
+			setDevs([...devs, dev])
+		);
+
+	}, [devs]);
+
+	// função que envia dados para o websocket (back-end)
+	function setupWebsocket() {
+
+		socket.disconnect();
+
+		const { latitude, longitude } 	= currentRegion;
+
+		const data 						= {latitude, longitude, techs};
+
+		socket.connect(data);
+
+	}
+
+	// carrega os devs e exibem do maps
 	async function loadDevs() {
 
 		const { latitude, longitude } = currentRegion;
@@ -59,18 +86,23 @@ function Main({ navigation }) {
 		});
 
 		//console.log(response.data.devs);
-
+		
 		setDevs(response.data.devs);
+
+		setupWebsocket();
 
 	}
 
+	// sempre que o usuário mover o mapa, atualiza posição atual
 	function handleRegionChanged( region ) {
 
 		setCurrentRegion( region );
 
+		setPosition( `${region.latitude}, ${region.longitude}`);
+
 	}
 
-	if( !currentRegion ){
+	if( !currentRegion ) {
 		return false;
 	}
 
@@ -94,6 +126,10 @@ function Main({ navigation }) {
 				))}
 
 			</MapView>
+
+			<Text style={styles.textPosition}>
+				Posição atual: {position}
+			</Text>
 
 			<View style={styles.searchForm}>
 
@@ -142,9 +178,33 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 	},
 
+	textPosition: {
+		position: 'absolute',
+		borderRadius: 25,
+		top: 20,
+		left: 20,
+		right: 20,
+		zIndex: 5,
+		padding: 5,
+		flex: 1,
+		backgroundColor: '#FFF',
+		fontSize: 10,
+		fontWeight: 'bold',
+		justifyContent: 'center',
+		alignItems: 'center',
+		color: '#CCC',
+		shadowColor: '#000',
+		shadowOpacity: 0.2,
+		shadowOffset: {
+			width: 4,
+			height: 4
+		},
+
+	},
+
 	searchForm: {
 		position: 'absolute',
-		top: 20,
+		top: 50,
 		left: 20,
 		right: 20,
 		zIndex: 5,

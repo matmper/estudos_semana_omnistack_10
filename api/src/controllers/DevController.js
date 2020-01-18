@@ -1,6 +1,7 @@
 const axios 				= require('axios');
 const Dev 					= require('../models/Dev');
 const parseStringAsArray 	= require('../utils/parseStringAsArray');
+const { findConnections, sendMessages } 	= require('../websocket')
 
 module.exports = {
 
@@ -17,7 +18,7 @@ module.exports = {
 
 		const { github_username, techs, latitude, longitude } = request.body;
 
-		// get
+		get
 		let dev = await Dev.findOne({ github_username });
 
 		if( !dev ) {
@@ -35,6 +36,7 @@ module.exports = {
 				coordinates: [longitude, latitude]
 			};
 
+			// insere o dev no db
 			dev = await Dev.create({
 				github_username,
 				name,
@@ -43,6 +45,15 @@ module.exports = {
 				techs: techsArray,
 				location,
 			});
+
+			// procura conexões que atendem o raio e techs para inserir no app
+			const sendSocketMessageTo = findConnections(
+				{ latitude, longitude },
+				techsArray
+			);
+
+			// ativa o websocket e insere o novo dev no app
+			sendMessages(sendSocketMessageTo, 'new-dev', dev);
 
 		}
 

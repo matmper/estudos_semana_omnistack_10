@@ -10,7 +10,7 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.6",
     "axios": "^0.19.1",
-    "expo": "~36.0.0",
+    "expo": "^36.0.2",
     "expo-location": "^8.0.0",
     "navigation": "^5.2.0",
     "react": "^16.12.0",
@@ -22,7 +22,8 @@
     "react-native-web": "~0.11.7",
     "react-native-webview": "^8.0.3",
     "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^2.0.15"
+    "react-navigation-stack": "^2.0.15",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
